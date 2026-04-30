@@ -1,9 +1,10 @@
 import express from 'express';
 import ALL_TRIM_DATA from '../data/trimData.js';
+import { getDepreciationBreakdown } from '../utils/dataGenerator.js';
 
 const router = express.Router();
 
-// Helper function to get trims for a vehicle
+// Helper function to get trims for a vehicle with depreciation applied
 function getTrims(make, model, year) {
   const key = `${make.toLowerCase()}|${model.toLowerCase()}`;
   const yearNum = parseInt(year);
@@ -18,13 +19,26 @@ function getTrims(make, model, year) {
     trim => yearNum >= trim.from && yearNum <= trim.to
   );
 
-  // If no trims for this year, return empty (will get fallback from MODEL_BASE_MSRP)
   if (availableTrims.length === 0) {
     return [];
   }
 
-  // Return sorted by MSRP (base trim first)
-  return availableTrims.sort((a, b) => a.msrp - b.msrp);
+  // Apply year-based depreciation to every trim
+  const breakdown = getDepreciationBreakdown(make, model, yearNum);
+  const multiplier = breakdown.finalMultiplier;
+
+  const depreciatedTrims = availableTrims.map(trim => ({
+    trim: trim.trim,
+    originalMsrp: trim.msrp,
+    msrp: Math.round(trim.msrp * multiplier),
+    invoicePrice: Math.round(trim.msrp * multiplier * 0.94),
+    depreciationPct: Math.round((1 - multiplier) * 100),
+    from: trim.from,
+    to: trim.to
+  }));
+
+  // Return sorted by depreciated MSRP (base trim first)
+  return depreciatedTrims.sort((a, b) => a.msrp - b.msrp);
 }
 
 router.get('/trims/:make/:model/:year', async (req, res) => {

@@ -142,9 +142,16 @@ const ALL_TRIM_DATA = {
     { trim: "M240i", msrp: 48000, from: 2022, to: 2026 },
   ],
   "bmw|3 series": [
-    { trim: "330i", msrp: 45000, from: 2019, to: 2026 },
-    { trim: "340i", msrp: 55000, from: 2016, to: 2026 },
-    { trim: "M340i", msrp: 58000, from: 2020, to: 2026 },
+    { trim: "330i Sedan", msrp: 44500, from: 2019, to: 2026 },
+    { trim: "330i xDrive Sedan", msrp: 46500, from: 2019, to: 2026 },
+    { trim: "330e (PHEV)", msrp: 45600, from: 2021, to: 2026 },
+    { trim: "330e xDrive (PHEV)", msrp: 47600, from: 2021, to: 2026 },
+    { trim: "M340i Sedan", msrp: 57600, from: 2020, to: 2026 },
+    { trim: "M340i xDrive Sedan", msrp: 59600, from: 2020, to: 2026 },
+    { trim: "M3 Sedan", msrp: 76000, from: 1988, to: 2026 },
+    { trim: "M3 Competition", msrp: 80200, from: 2021, to: 2026 },
+    { trim: "M3 Competition xDrive", msrp: 84300, from: 2021, to: 2026 },
+    { trim: "M3 CS", msrp: 118700, from: 2024, to: 2026 },
   ],
   "bmw|4 series": [
     { trim: "430i", msrp: 48000, from: 2021, to: 2026 },
@@ -438,9 +445,15 @@ const ALL_TRIM_DATA = {
     { trim: "Dark Horse", msrp: 62000, from: 2024, to: 2026 },
   ],
   "ford|f-150": [
-    { trim: "XL", msrp: 36000, from: 2009, to: 2026 },
-    { trim: "XLT", msrp: 42000, from: 2009, to: 2026 },
-    { trim: "Platinum", msrp: 66000, from: 2009, to: 2026 },
+    { trim: "XL", msrp: 36770, from: 2009, to: 2026 },
+    { trim: "STX", msrp: 43895, from: 2021, to: 2026 },
+    { trim: "XLT", msrp: 47620, from: 2009, to: 2026 },
+    { trim: "Lariat", msrp: 65195, from: 2009, to: 2026 },
+    { trim: "King Ranch", msrp: 73730, from: 2009, to: 2026 },
+    { trim: "Platinum", msrp: 73730, from: 2009, to: 2026 },
+    { trim: "Tremor", msrp: 64150, from: 2021, to: 2026 },
+    { trim: "Raptor", msrp: 78330, from: 2010, to: 2026 },
+    { trim: "Raptor R", msrp: 110255, from: 2023, to: 2026 },
   ],
   "ford|explorer": [
     { trim: "Base", msrp: 38000, from: 2020, to: 2026 },
@@ -552,9 +565,12 @@ const ALL_TRIM_DATA = {
 
   // ─── HONDA ─────────────────────────────────────────────────────────────────
   "honda|civic": [
-    { trim: "LX", msrp: 24000, from: 2016, to: 2026 },
-    { trim: "EX", msrp: 28000, from: 2016, to: 2026 },
-    { trim: "Touring", msrp: 32000, from: 2016, to: 2026 },
+    { trim: "LX Sedan", msrp: 23950, from: 2016, to: 2026 },
+    { trim: "Sport Sedan", msrp: 25550, from: 2016, to: 2026 },
+    { trim: "EX Sedan", msrp: 26950, from: 2016, to: 2026 },
+    { trim: "Touring Sedan", msrp: 30550, from: 2016, to: 2026 },
+    { trim: "Si", msrp: 29100, from: 2016, to: 2026 },
+    { trim: "Type R", msrp: 44795, from: 2017, to: 2026 },
   ],
   "honda|accord": [
     { trim: "LX", msrp: 30000, from: 2018, to: 2026 },
@@ -923,9 +939,12 @@ const ALL_TRIM_DATA = {
     { trim: "A 220 AMG", msrp: 40000, from: 2020, to: 2026 },
   ],
   "mercedes-benz|c-class": [
-    { trim: "C 300 Sedan", msrp: 48000, from: 1994, to: 2026 },
-    { trim: "C 300 4MATIC", msrp: 50000, from: 2015, to: 2026 },
-    { trim: "AMG C 63", msrp: 62000, from: 2023, to: 2026 },
+    { trim: "C 300 Premium", msrp: 46950, from: 1994, to: 2026 },
+    { trim: "C 300 Exclusive", msrp: 49200, from: 2022, to: 2026 },
+    { trim: "C 300 Pinnacle", msrp: 51150, from: 2022, to: 2026 },
+    { trim: "C 300 4MATIC", msrp: 48950, from: 2015, to: 2026 },
+    { trim: "AMG C 43", msrp: 59900, from: 2017, to: 2026 },
+    { trim: "AMG C 63 S E Performance", msrp: 83900, from: 2023, to: 2026 },
   ],
   "mercedes-benz|e-class": [
     { trim: "E 350 Sedan", msrp: 65000, from: 1994, to: 2026 },
@@ -1072,9 +1091,18 @@ const ALL_TRIM_DATA = {
 
   // ─── PORSCHE ───────────────────────────────────────────────────────────────
   "porsche|911": [
-    { trim: "Carrera", msrp: 115000, from: 1965, to: 2026 },
-    { trim: "Carrera S", msrp: 135400, from: 1965, to: 2026 },
-    { trim: "GT3", msrp: 173000, from: 2004, to: 2026 },
+    { trim: "Carrera", msrp: 114400, from: 1965, to: 2026 },
+    { trim: "Carrera T", msrp: 124900, from: 1965, to: 2026 },
+    { trim: "Carrera 4", msrp: 121700, from: 1965, to: 2026 },
+    { trim: "Carrera S", msrp: 131300, from: 1965, to: 2026 },
+    { trim: "Carrera 4S", msrp: 138600, from: 1965, to: 2026 },
+    { trim: "Carrera GTS", msrp: 150900, from: 2011, to: 2026 },
+    { trim: "Carrera 4 GTS", msrp: 158200, from: 2011, to: 2026 },
+    { trim: "Turbo", msrp: 197200, from: 1975, to: 2026 },
+    { trim: "Turbo S", msrp: 230400, from: 2004, to: 2026 },
+    { trim: "GT3", msrp: 182900, from: 2004, to: 2026 },
+    { trim: "GT3 RS", msrp: 241300, from: 2004, to: 2026 },
+    { trim: "S/T", msrp: 290000, from: 2024, to: 2026 },
   ],
   "porsche|718 cayman": [
     { trim: "Base", msrp: 73000, from: 2016, to: 2026 },
@@ -1170,18 +1198,18 @@ const ALL_TRIM_DATA = {
     { trim: "Plaid", msrp: 108990, from: 2021, to: 2026 },
   ],
   "tesla|model 3": [
-    { trim: "RWD", msrp: 40240, from: 2023, to: 2026 },
-    { trim: "Long Range AWD", msrp: 51000, from: 2023, to: 2026 },
-    { trim: "Performance AWD", msrp: 57000, from: 2023, to: 2026 },
+    { trim: "Rear-Wheel Drive", msrp: 38990, from: 2023, to: 2026 },
+    { trim: "Long Range AWD", msrp: 47740, from: 2023, to: 2026 },
+    { trim: "Performance AWD", msrp: 54990, from: 2024, to: 2026 },
   ],
   "tesla|model x": [
     { trim: "Long Range", msrp: 98990, from: 2016, to: 2026 },
     { trim: "Plaid", msrp: 118990, from: 2021, to: 2026 },
   ],
   "tesla|model y": [
-    { trim: "RWD", msrp: 43990, from: 2023, to: 2026 },
-    { trim: "Long Range AWD", msrp: 54000, from: 2023, to: 2026 },
-    { trim: "Performance AWD", msrp: 62000, from: 2023, to: 2026 },
+    { trim: "Rear-Wheel Drive", msrp: 42990, from: 2023, to: 2026 },
+    { trim: "Long Range AWD", msrp: 47990, from: 2023, to: 2026 },
+    { trim: "Performance AWD", msrp: 51490, from: 2023, to: 2026 },
   ],
   "tesla|cybertruck": [
     { trim: "AWD", msrp: 82235, from: 2024, to: 2026 },
@@ -1190,9 +1218,15 @@ const ALL_TRIM_DATA = {
 
   // ─── TOYOTA ────────────────────────────────────────────────────────────────
   "toyota|camry": [
-    { trim: "LE", msrp: 28000, from: 2018, to: 2026 },
-    { trim: "SE", msrp: 30000, from: 2018, to: 2026 },
-    { trim: "XLE", msrp: 34000, from: 2018, to: 2026 },
+    { trim: "LE", msrp: 26420, from: 2018, to: 2026 },
+    { trim: "SE", msrp: 27960, from: 2018, to: 2026 },
+    { trim: "LE Hybrid", msrp: 28855, from: 2018, to: 2026 },
+    { trim: "SE Nightshade", msrp: 28960, from: 2018, to: 2026 },
+    { trim: "XLE", msrp: 31170, from: 2018, to: 2026 },
+    { trim: "XSE", msrp: 31720, from: 2018, to: 2026 },
+    { trim: "TRD V6", msrp: 33485, from: 2020, to: 2026 },
+    { trim: "XLE V6", msrp: 36295, from: 2018, to: 2026 },
+    { trim: "XSE V6", msrp: 36845, from: 2018, to: 2026 },
   ],
   "toyota|corolla": [
     { trim: "L", msrp: 22000, from: 2019, to: 2026 },
@@ -1200,9 +1234,15 @@ const ALL_TRIM_DATA = {
     { trim: "XLE", msrp: 28000, from: 2019, to: 2026 },
   ],
   "toyota|rav4": [
-    { trim: "LE", msrp: 30000, from: 2019, to: 2026 },
-    { trim: "XLE", msrp: 33000, from: 2019, to: 2026 },
-    { trim: "Limited", msrp: 42000, from: 2019, to: 2026 },
+    { trim: "LE", msrp: 28675, from: 2019, to: 2026 },
+    { trim: "XLE", msrp: 30185, from: 2019, to: 2026 },
+    { trim: "XLE Premium", msrp: 33075, from: 2019, to: 2026 },
+    { trim: "Adventure", msrp: 34870, from: 2019, to: 2026 },
+    { trim: "Limited", msrp: 36980, from: 2019, to: 2026 },
+    { trim: "TRD Off-Road", msrp: 38295, from: 2019, to: 2026 },
+    { trim: "Hybrid SE", msrp: 34120, from: 2019, to: 2026 },
+    { trim: "Prime SE (PHEV)", msrp: 43690, from: 2021, to: 2026 },
+    { trim: "Prime XSE (PHEV)", msrp: 47560, from: 2021, to: 2026 },
   ],
   "toyota|highlander": [
     { trim: "L", msrp: 38000, from: 2020, to: 2026 },

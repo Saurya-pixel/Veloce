@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export function TrendChart({ make, model, year }) {
   const [trendData, setTrendData] = useState([]);
@@ -21,17 +21,25 @@ export function TrendChart({ make, model, year }) {
         const data = await res.json();
         setTrendData(data);
 
-        // Calculate stats
         const prices = data.map(d => d.avgPrice);
         const incentives = data.map(d => d.incentive);
 
-        const stats = {
+        // Calculate trend direction
+        const firstHalf = prices.slice(0, 6);
+        const secondHalf = prices.slice(6);
+        const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+        const secondAvg = secondHalf.length > 0 ? secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length : firstAvg;
+        const trendDirection = secondAvg >= firstAvg ? 'up' : 'down';
+        const trendPct = Math.abs(((secondAvg - firstAvg) / firstAvg) * 100).toFixed(1);
+
+        setStats({
           lowPrice: Math.min(...prices),
           highPrice: Math.max(...prices),
           avgPrice: Math.round(prices.reduce((a, b) => a + b, 0) / prices.length),
           avgIncentive: Math.round(incentives.reduce((a, b) => a + b, 0) / incentives.length),
-        };
-        setStats(stats);
+          trendDirection,
+          trendPct,
+        });
       } catch (error) {
         console.error('Error fetching trends:', error);
       }
@@ -43,7 +51,7 @@ export function TrendChart({ make, model, year }) {
 
   if (!make || !model || !year) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6 text-center text-gray-400">
+      <div className="p-6 text-center text-slate-500 text-sm">
         Select a vehicle to view price trends
       </div>
     );
@@ -51,97 +59,116 @@ export function TrendChart({ make, model, year }) {
 
   if (loading) {
     return (
-      <div className="bg-gray-800 rounded-lg p-6 text-center text-gray-400">
-        Loading trends...
+      <div className="p-6 text-center text-slate-500 text-sm">
+        <div className="inline-block w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-2" />
+        Loading market data...
       </div>
     );
   }
 
-  const formatCurrency = (value) => {
-    return '$' + value.toLocaleString();
-  };
+  const formatCurrency = (value) => '$' + value.toLocaleString();
+
+  const isUsed = parseInt(year) < 2026;
+  const age = 2026 - parseInt(year);
 
   return (
-    <div className="space-y-4">
-      <div className="bg-gray-800 rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-blue-400" />
-          13-Month Price & Incentive Trends
-        </h3>
+    <div className="space-y-6 animate-fade-in">
+      {/* Trend summary badge */}
+      {stats.trendDirection && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {stats.trendDirection === 'up' ? (
+              <TrendingUp className="w-4 h-4 text-emerald-400" />
+            ) : (
+              <TrendingDown className="w-4 h-4 text-red-400" />
+            )}
+            <span className="text-xs text-slate-400">
+              {isUsed ? `${age}-year depreciated pricing` : 'New vehicle market pricing'} — 
+              <span className={stats.trendDirection === 'up' ? 'text-emerald-400' : 'text-red-400'}>
+                {' '}{stats.trendDirection === 'up' ? '↑' : '↓'} {stats.trendPct}% over 12 months
+              </span>
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Chart */}
+      <div className="glass-card p-5">
+        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+          {isUsed ? 'Market Value Over Time' : 'Price & Incentive Trends'}
+        </h4>
 
         {trendData.length > 0 && (
-          <div className="w-full h-80">
+          <div className="w-full h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                <XAxis dataKey="month" stroke="#999" />
-                <YAxis yAxisId="left" stroke="#999" />
-                <YAxis yAxisId="right" orientation="right" stroke="#999" />
+              <AreaChart data={trendData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="incentiveGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                <XAxis dataKey="month" stroke="#334155" fontSize={10} tickLine={false} axisLine={false} dy={8} />
+                <YAxis stroke="#334155" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#1f2937',
-                    border: '1px solid #444',
-                    borderRadius: '0.5rem'
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '0.75rem',
+                    backdropFilter: 'blur(10px)',
+                    fontSize: '12px',
                   }}
-                  formatter={(value) => formatCurrency(value)}
-                  labelStyle={{ color: '#fff' }}
+                  labelStyle={{ color: '#fff', fontWeight: 'bold', marginBottom: '4px' }}
+                  formatter={(value, name) => [
+                    formatCurrency(value),
+                    name === 'avgPrice' ? 'Market Value' : 'Incentives'
+                  ]}
                 />
-                <Legend />
-                <Line
-                  yAxisId="left"
+                <Area
                   type="monotone"
                   dataKey="avgPrice"
                   stroke="#3b82f6"
-                  name="Avg Transaction Price"
-                  dot={{ fill: '#3b82f6', r: 4 }}
-                  activeDot={{ r: 6 }}
-                  strokeWidth={2}
+                  strokeWidth={2.5}
+                  fill="url(#priceGradient)"
+                  dot={false}
+                  activeDot={{ r: 5, fill: '#3b82f6', stroke: '#1e3a5f', strokeWidth: 2 }}
                 />
-                <Line
-                  yAxisId="right"
+                <Area
                   type="monotone"
                   dataKey="incentive"
                   stroke="#10b981"
-                  name="Avg Incentive"
-                  dot={{ fill: '#10b981', r: 4 }}
-                  activeDot={{ r: 6 }}
-                  strokeWidth={2}
+                  strokeWidth={1.5}
+                  fill="url(#incentiveGradient)"
+                  dot={false}
+                  activeDot={{ r: 4, fill: '#10b981' }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         )}
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-gray-800 rounded-lg p-4">
-          <p className="text-sm text-gray-400">52-Week Low</p>
-          <p className="text-xl font-mono font-bold text-green-400 mt-1">
-            {formatCurrency(stats.lowPrice || 0)}
-          </p>
-        </div>
-
-        <div className="bg-gray-800 rounded-lg p-4">
-          <p className="text-sm text-gray-400">52-Week Avg</p>
-          <p className="text-xl font-mono font-bold text-blue-400 mt-1">
-            {formatCurrency(stats.avgPrice || 0)}
-          </p>
-        </div>
-
-        <div className="bg-gray-800 rounded-lg p-4">
-          <p className="text-sm text-gray-400">52-Week High</p>
-          <p className="text-xl font-mono font-bold text-red-400 mt-1">
-            {formatCurrency(stats.highPrice || 0)}
-          </p>
-        </div>
-
-        <div className="bg-gray-800 rounded-lg p-4">
-          <p className="text-sm text-gray-400">Avg Incentive</p>
-          <p className="text-xl font-mono font-bold text-emerald-400 mt-1">
-            {formatCurrency(stats.avgIncentive || 0)}
-          </p>
-        </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: '12M Low', value: stats.lowPrice, color: 'text-emerald-400' },
+          { label: '12M Avg', value: stats.avgPrice, color: 'text-blue-400' },
+          { label: '12M High', value: stats.highPrice, color: 'text-red-400' },
+          { label: 'Avg Incentive', value: stats.avgIncentive, color: 'text-indigo-400' }
+        ].map((stat, i) => (
+          <div key={i} className="glass-card p-3">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</p>
+            <p className={`text-base font-mono font-bold mt-1 ${stat.color}`}>
+              {formatCurrency(stat.value || 0)}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

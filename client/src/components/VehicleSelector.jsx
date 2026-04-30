@@ -119,69 +119,73 @@ export function VehicleSelector({ onVehicleChange, selectedMake, selectedModel, 
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div>
-        <label className="block text-sm font-medium mb-2">Make</label>
-        <select
-          value={selectedMake}
-          onChange={handleMakeChange}
-          disabled={loadingMakes}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
-        >
-          <option value="">Select a make...</option>
-          {makes.map(make => (
-            <option key={make} value={make}>{make}</option>
-          ))}
-        </select>
+    <div className="space-y-4 animate-fade-in">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="premium-label">Make</label>
+          <select
+            value={selectedMake}
+            onChange={handleMakeChange}
+            disabled={loadingMakes}
+            className="premium-input bg-slate-950/50"
+          >
+            <option value="">Select a make...</option>
+            {makes.map(make => (
+              <option key={make} value={make}>{make}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="premium-label">Model</label>
+          <select
+            value={selectedModel}
+            onChange={handleModelChange}
+            disabled={!selectedMake || loadingModels}
+            className="premium-input bg-slate-950/50"
+          >
+            <option value="">Select a model...</option>
+            {models.map(model => (
+              <option key={model} value={model}>{model}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">Model</label>
-        <select
-          value={selectedModel}
-          onChange={handleModelChange}
-          disabled={!selectedMake || loadingModels}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
-        >
-          <option value="">Select a model...</option>
-          {models.map(model => (
-            <option key={model} value={model}>{model}</option>
-          ))}
-        </select>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="premium-label">Year</label>
+          <select
+            value={selectedYear}
+            onChange={handleYearChange}
+            disabled={!selectedModel || loadingYears}
+            className="premium-input bg-slate-950/50"
+          >
+            <option value="">
+              {loadingYears ? 'Loading years...' : 'Select a year...'}
+            </option>
+            {years.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-2">Year</label>
-        <select
-          value={selectedYear}
-          onChange={handleYearChange}
-          disabled={!selectedModel || loadingYears}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
-        >
-          <option value="">
-            {loadingYears ? 'Loading years...' : 'Select a year...'}
-          </option>
-          {years.map(year => (
-            <option key={year} value={year}>{year}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium mb-2">Trim</label>
-        <select
-          value={selectedTrim}
-          onChange={handleTrimChange}
-          disabled={!selectedYear || loadingTrims}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
-        >
-          <option value="">
-            {loadingTrims ? 'Loading trims...' : 'Select a trim...'}
-          </option>
-          {trims.map(trim => (
-            <option key={trim.trim} value={trim.trim}>{trim.trim}</option>
-          ))}
-        </select>
+        <div>
+          <label className="premium-label">Trim / Edition</label>
+          <select
+            value={selectedTrim}
+            onChange={handleTrimChange}
+            disabled={!selectedYear || loadingTrims}
+            className="premium-input bg-slate-950/50 border-blue-500/30"
+          >
+            <option value="">
+              {loadingTrims ? 'Loading trims...' : 'Select a trim...'}
+            </option>
+            {trims.map(trim => (
+              <option key={trim.trim} value={trim.trim}>{trim.trim} - {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(trim.msrp)}</option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );

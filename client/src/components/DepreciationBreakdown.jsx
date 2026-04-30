@@ -9,71 +9,58 @@ export function DepreciationBreakdown({ make, model, year, baseMsrp, currentMsrp
   }
 
   return (
-    <div className="mt-4 bg-gray-700 rounded-lg overflow-hidden">
+    <div className="mt-4 bg-slate-950/40 rounded-xl overflow-hidden border border-white/5">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-600 transition"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors group"
       >
-        <span className="text-sm font-medium">How this price was calculated</span>
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest group-hover:text-slate-300 transition-colors">
+          Price Calculation Details
+        </span>
         {expanded ? (
-          <ChevronUp className="w-4 h-4" />
+          <ChevronUp className="w-4 h-4 text-slate-500" />
         ) : (
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDown className="w-4 h-4 text-slate-500" />
         )}
       </button>
 
       {expanded && (
-        <div className="px-4 py-3 bg-gray-800 border-t border-gray-700 space-y-3 text-sm">
-          {/* Base MSRP */}
+        <div className="px-4 py-4 bg-slate-950/20 border-t border-white/5 space-y-3 text-[11px]">
           <div className="flex justify-between">
-            <span className="text-gray-400">Base MSRP (new):</span>
-            <span className="text-right font-mono">
+            <span className="text-slate-400 italic">MSRP when manufactured</span>
+            <span className="font-mono text-slate-300">
               ${baseMsrp ? baseMsrp.toLocaleString() : '0'}
             </span>
           </div>
 
-          {/* Year Depreciation */}
-          <div className="flex justify-between">
-            <span className="text-gray-400">
-              Year depreciation ({year}):
-            </span>
-            <span className="text-right font-mono text-red-400">
+          <div className="flex justify-between items-center">
+            <span className="text-slate-400">Market depreciation for {year}</span>
+            <span className="font-mono text-red-400 bg-red-400/10 px-1.5 rounded">
               −{breakdown.yearDepreciationPct}%
             </span>
           </div>
 
-          {/* Brand Adjustment */}
           {breakdown.brandAdjustmentPct !== 0 && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">
-                Brand value retention ({make}):
-              </span>
-              <span
-                className={`text-right font-mono ${
-                  breakdown.brandAdjustmentPct > 0
-                    ? 'text-green-400'
-                    : 'text-red-400'
-                }`}
-              >
-                {breakdown.brandAdjustmentPct > 0 ? '+' : ''}
-                {breakdown.brandAdjustmentPct}%
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">Brand retention strength ({make})</span>
+              <span className={`font-mono px-1.5 rounded ${breakdown.brandAdjustmentPct > 0 ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'}`}>
+                {breakdown.brandAdjustmentPct > 0 ? '+' : ''}{breakdown.brandAdjustmentPct}%
               </span>
             </div>
           )}
 
-          {/* EV Adjustment */}
           {breakdown.isEV && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">EV depreciation adjustment:</span>
-              <span className="text-right font-mono text-red-400">
+            <div className="flex justify-between items-center">
+              <span className="text-slate-400">EV market adjustment</span>
+              <span className="font-mono text-red-400 bg-red-400/10 px-1.5 rounded">
                 −{breakdown.evAdjustmentPct}%
               </span>
             </div>
           )}
 
-          <div className="border-t border-gray-700 pt-3 flex justify-between font-medium">
-            <span className="text-gray-300">Estimated value:</span>
-            <span className="text-right font-mono text-blue-400">
+          <div className="border-t border-white/10 pt-3 flex justify-between font-bold text-sm">
+            <span className="text-slate-300">Net Fair Value</span>
+            <span className="font-mono text-blue-400">
               ${currentMsrp ? currentMsrp.toLocaleString() : '0'}
             </span>
           </div>

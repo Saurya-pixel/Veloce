@@ -6,7 +6,7 @@ import { FeesSection } from './components/FeesSection';
 import { FinancingSection } from './components/FinancingSection';
 import { PriceBreakdown } from './components/PriceBreakdown';
 import { TrendChart } from './components/TrendChart';
-import { DepreciationBreakdown } from './components/DepreciationBreakdown';
+import { HeroSection } from './components/HeroSection';
 
 function App() {
   const [vehicle, setVehicle] = useState({ make: '', model: '', year: '', trim: '' });
@@ -21,6 +21,7 @@ function App() {
 
   // Price inputs
   const [msrp, setMsrp] = useState(0);
+  const [originalMsrp, setOriginalMsrp] = useState(0);
   const [dealerDiscount, setDealerDiscount] = useState(0);
   const [tradeInValue, setTradeInValue] = useState(0);
   const [remainingLoan, setRemainingLoan] = useState(0);
@@ -28,28 +29,30 @@ function App() {
   const [downPayment, setDownPayment] = useState(0);
 
   // Fees
-  const [taxRate, setTaxRate] = useState(0.07); // Default 7%
+  const [taxRate, setTaxRate] = useState(0.0725);
   const [selectedState, setSelectedState] = useState('CA');
-  const [docFee, setDocFee] = useState(200);
-  const [registrationFee, setRegistrationFee] = useState(150);
-  const [destinationCharge, setDestinationCharge] = useState(1200);
+  const [docFee, setDocFee] = useState(85);
+  const [registrationFee, setRegistrationFee] = useState(450);
+  const [destinationCharge, setDestinationCharge] = useState(0);
+
+  // Calculation Toggles
+  const [isTaxAfterTradeIn, setIsTaxAfterTradeIn] = useState(false);
+  const [isRebateTaxable, setIsRebateTaxable] = useState(true);
 
   // Financing
-  const [apr, setApr] = useState(5.0);
+  const [apr, setApr] = useState(5.99);
   const [loanTerm, setLoanTerm] = useState(60);
+
+  const currentYear = 2026;
+  const isUsedCar = vehicle.year && parseInt(vehicle.year) < currentYear;
+  const hasVehicleSelected = vehicle.make && vehicle.model && vehicle.year;
 
   // Fetch pricing when vehicle changes
   useEffect(() => {
     if (!vehicle.make || !vehicle.model || !vehicle.year) {
-      setPricing({
-        msrp: 0,
-        invoicePrice: 0,
-        averagePaidPrice: 0,
-        dealerMarkup: 0,
-        incentives: 0,
-        confidence: 'unknown'
-      });
+      setPricing({ msrp: 0, invoicePrice: 0, averagePaidPrice: 0, dealerMarkup: 0, incentives: 0, confidence: 'unknown' });
       setMsrp(0);
+      setOriginalMsrp(0);
       return;
     }
 
@@ -58,9 +61,9 @@ function App() {
         const res = await fetch(`/api/pricing/${vehicle.make}/${vehicle.model}/${vehicle.year}`);
         const data = await res.json();
         setPricing(data);
-        // Only set MSRP if trim is not selected, so trim data takes precedence
         if (!vehicle.trim) {
           setMsrp(data.msrp);
+          setOriginalMsrp(data.basePrice || data.msrp);
         }
       } catch (error) {
         console.error('Error fetching pricing:', error);
@@ -68,13 +71,18 @@ function App() {
     };
 
     fetchPricing();
+
+    const yearNum = parseInt(vehicle.year);
+    if (yearNum < currentYear) {
+      setDestinationCharge(0);
+    } else {
+      setDestinationCharge(1200);
+    }
   }, [vehicle.make, vehicle.model, vehicle.year]);
 
-  // Handle trim selection and auto-populate MSRP and invoice
+  // Handle trim selection
   useEffect(() => {
-    if (!vehicle.trim || !vehicle.make || !vehicle.model || !vehicle.year) {
-      return;
-    }
+    if (!vehicle.trim || !vehicle.make || !vehicle.model || !vehicle.year) return;
 
     const fetchTrimsAndSelect = async () => {
       try {
@@ -84,10 +92,11 @@ function App() {
 
         if (selectedTrimData) {
           setMsrp(selectedTrimData.msrp);
+          setOriginalMsrp(selectedTrimData.originalMsrp || selectedTrimData.msrp);
           setPricing(prev => ({
             ...prev,
             msrp: selectedTrimData.msrp,
-            invoicePrice: selectedTrimData.invoicePrice
+            invoicePrice: selectedTrimData.invoicePrice || (selectedTrimData.msrp * 0.94)
           }));
         }
       } catch (error) {
@@ -98,173 +107,165 @@ function App() {
     fetchTrimsAndSelect();
   }, [vehicle.trim, vehicle.make, vehicle.model, vehicle.year]);
 
-  const handleVehicleChange = (newVehicle) => {
-    setVehicle(newVehicle);
-  };
-
   const handleInputChange = (field, value) => {
-    switch (field) {
-      case 'msrp':
-        setMsrp(value);
-        break;
-      case 'dealerDiscount':
-        setDealerDiscount(value);
-        break;
-      case 'tradeInValue':
-        setTradeInValue(value);
-        break;
-      case 'remainingLoan':
-        setRemainingLoan(value);
-        break;
-      case 'manufacturerRebate':
-        setManufacturerRebate(value);
-        break;
-      case 'downPayment':
-        setDownPayment(value);
-        break;
-      case 'taxRate':
-        setTaxRate(value);
-        break;
-      case 'selectedState':
-        setSelectedState(value);
-        break;
-      case 'docFee':
-        setDocFee(value);
-        break;
-      case 'registrationFee':
-        setRegistrationFee(value);
-        break;
-      case 'destinationCharge':
-        setDestinationCharge(value);
-        break;
-      case 'apr':
-        setApr(value);
-        break;
-      case 'loanTerm':
-        setLoanTerm(value);
-        break;
-      default:
-        break;
-    }
+    const setters = {
+      msrp: setMsrp, dealerDiscount: setDealerDiscount, tradeInValue: setTradeInValue,
+      remainingLoan: setRemainingLoan, manufacturerRebate: setManufacturerRebate,
+      downPayment: setDownPayment, taxRate: setTaxRate, selectedState: setSelectedState,
+      docFee: setDocFee, registrationFee: setRegistrationFee, destinationCharge: setDestinationCharge,
+      apr: setApr, loanTerm: setLoanTerm
+    };
+    if (setters[field]) setters[field](value);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-2">
-            <Car className="w-8 h-8 text-blue-500" />
-            <h1 className="text-4xl font-bold">Car Price Calculator</h1>
-          </div>
-          <p className="text-gray-400">Calculate your out-the-door price with real-time insights</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Inputs */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Vehicle Selection */}
-            <div className="bg-gray-800 rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">Select Vehicle</h2>
-              <VehicleSelector
-                onVehicleChange={handleVehicleChange}
-                selectedMake={vehicle.make}
-                selectedModel={vehicle.model}
-                selectedYear={vehicle.year}
-                selectedTrim={vehicle.trim}
-              />
+    <div className="min-h-screen">
+      {/* Header */}
+      <div className="py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center animate-fade-in">
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <div className="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30">
+              <Car className="w-10 h-10 text-blue-500" />
             </div>
-
-            {/* Price Inputs */}
-            {vehicle.year && (
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Price Information</h2>
-                <PriceInputs
-                  msrp={msrp}
-                  dealerDiscount={dealerDiscount}
-                  tradeInValue={tradeInValue}
-                  remainingLoan={remainingLoan}
-                  manufacturerRebate={manufacturerRebate}
-                  downPayment={downPayment}
-                  onInputChange={handleInputChange}
-                />
-                <DepreciationBreakdown
-                  make={vehicle.make}
-                  model={vehicle.model}
-                  year={vehicle.year}
-                  baseMsrp={pricing.basePrice}
-                  currentMsrp={msrp || pricing.msrp}
-                  breakdown={pricing.breakdown}
-                />
-              </div>
-            )}
-
-            {/* Fees Section */}
-            {vehicle.year && (
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Fees & Taxes</h2>
-                <FeesSection
-                  taxRate={taxRate}
-                  docFee={docFee}
-                  registrationFee={registrationFee}
-                  destinationCharge={destinationCharge}
-                  selectedState={selectedState}
-                  onInputChange={handleInputChange}
-                />
-              </div>
-            )}
-
-            {/* Financing Section */}
-            {vehicle.year && (
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-4">Financing</h2>
-                <FinancingSection
-                  apr={apr}
-                  loanTerm={loanTerm}
-                  onInputChange={handleInputChange}
-                />
-              </div>
-            )}
+            <h1 className="text-5xl font-black tracking-tighter italic uppercase">
+              Vel<span className="text-blue-500">oce</span>
+            </h1>
           </div>
-
-          {/* Right Column - Results */}
-          <div className="lg:col-span-2 space-y-8">
-            {vehicle.year ? (
-              <>
-                {/* Price Breakdown */}
-                <PriceBreakdown
-                  msrp={msrp || pricing.msrp}
-                  dealerDiscount={dealerDiscount}
-                  manufacturerRebate={manufacturerRebate}
-                  destinationCharge={destinationCharge}
-                  taxRate={taxRate}
-                  docFee={docFee}
-                  registrationFee={registrationFee}
-                  tradeInValue={tradeInValue}
-                  remainingLoan={remainingLoan}
-                  downPayment={downPayment}
-                  apr={apr}
-                  loanTerm={loanTerm}
-                  invoicePrice={pricing.invoicePrice}
-                  priceConfidence={pricing.confidence}
-                />
-
-                {/* Trend Chart */}
-                <TrendChart
-                  make={vehicle.make}
-                  model={vehicle.model}
-                  year={vehicle.year}
-                />
-              </>
-            ) : (
-              <div className="bg-gray-800 rounded-lg p-12 text-center">
-                <Car className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <p className="text-xl text-gray-400">Select a vehicle to get started</p>
-              </div>
-            )}
-          </div>
+          <p className="text-slate-400 max-w-lg mx-auto text-sm">
+            Professional-grade automotive financial intelligence
+          </p>
         </div>
       </div>
+
+      {/* ─── Landing State: Hero with embedded vehicle selector ─── */}
+      {!hasVehicleSelected && (
+        <HeroSection
+          onVehicleChange={setVehicle}
+          selectedMake={vehicle.make}
+          selectedModel={vehicle.model}
+          selectedYear={vehicle.year}
+          selectedTrim={vehicle.trim}
+        />
+      )}
+
+      {/* ─── Configurator State: Full layout after vehicle is selected ─── */}
+      {hasVehicleSelected && (
+        <div className="px-4 sm:px-6 lg:px-8 pb-12 animate-fade-in">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column - Configuration */}
+              <div className="lg:col-span-4 space-y-6">
+                {/* Vehicle selector — always accessible at top */}
+                <div className="glass-card p-6">
+                  <h2 className="premium-label mb-4">1. Vehicle</h2>
+                  <VehicleSelector
+                    onVehicleChange={setVehicle}
+                    selectedMake={vehicle.make}
+                    selectedModel={vehicle.model}
+                    selectedYear={vehicle.year}
+                    selectedTrim={vehicle.trim}
+                  />
+                </div>
+
+                <div className="glass-card p-6">
+                  <h2 className="premium-label mb-4">2. Pricing & Credits</h2>
+                  {isUsedCar && (
+                    <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs text-amber-200">
+                      <span className="font-bold">Used Vehicle</span> — Prices reflect current market value with depreciation applied.
+                    </div>
+                  )}
+                  <PriceInputs
+                    msrp={msrp}
+                    dealerDiscount={dealerDiscount}
+                    tradeInValue={tradeInValue}
+                    remainingLoan={remainingLoan}
+                    manufacturerRebate={manufacturerRebate}
+                    downPayment={downPayment}
+                    onInputChange={handleInputChange}
+                  />
+                </div>
+
+                <div className="glass-card p-6">
+                  <h2 className="premium-label mb-4">3. Fees & Tax</h2>
+                  <FeesSection
+                    taxRate={taxRate}
+                    docFee={docFee}
+                    registrationFee={registrationFee}
+                    destinationCharge={destinationCharge}
+                    selectedState={selectedState}
+                    onInputChange={handleInputChange}
+                  />
+                  <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs text-slate-400 uppercase tracking-widest font-bold">Tax after trade-in</label>
+                      <button
+                        onClick={() => setIsTaxAfterTradeIn(!isTaxAfterTradeIn)}
+                        className={`w-10 h-5 rounded-full transition-colors relative ${isTaxAfterTradeIn ? 'bg-blue-600' : 'bg-slate-700'}`}
+                      >
+                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${isTaxAfterTradeIn ? 'left-6' : 'left-1'}`} />
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs text-slate-400 uppercase tracking-widest font-bold">Taxable Rebates</label>
+                      <button
+                        onClick={() => setIsRebateTaxable(!isRebateTaxable)}
+                        className={`w-10 h-5 rounded-full transition-colors relative ${isRebateTaxable ? 'bg-blue-600' : 'bg-slate-700'}`}
+                      >
+                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${isRebateTaxable ? 'left-6' : 'left-1'}`} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="glass-card p-6">
+                  <h2 className="premium-label mb-4">4. Financing</h2>
+                  <FinancingSection
+                    apr={apr}
+                    loanTerm={loanTerm}
+                    onInputChange={handleInputChange}
+                  />
+                </div>
+              </div>
+
+              {/* Right Column - Results */}
+              <div className="lg:col-span-8">
+                <div className="space-y-8 lg:sticky lg:top-8">
+                  <PriceBreakdown
+                    msrp={msrp || pricing.msrp}
+                    originalMsrp={originalMsrp}
+                    dealerDiscount={dealerDiscount}
+                    manufacturerRebate={manufacturerRebate}
+                    destinationCharge={destinationCharge}
+                    taxRate={taxRate}
+                    docFee={docFee}
+                    registrationFee={registrationFee}
+                    tradeInValue={tradeInValue}
+                    remainingLoan={remainingLoan}
+                    downPayment={downPayment}
+                    apr={apr}
+                    loanTerm={loanTerm}
+                    invoicePrice={pricing.invoicePrice}
+                    priceConfidence={pricing.confidence}
+                    isTaxAfterTradeIn={isTaxAfterTradeIn}
+                    isRebateTaxable={isRebateTaxable}
+                    isUsedCar={isUsedCar}
+                    vehicleYear={vehicle.year}
+                  />
+
+                  <div className="glass-card p-6">
+                    <h3 className="premium-label mb-6">Market Trends</h3>
+                    <TrendChart
+                      make={vehicle.make}
+                      model={vehicle.model}
+                      year={vehicle.year}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

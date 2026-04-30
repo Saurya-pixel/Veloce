@@ -28,14 +28,14 @@ export function FeesSection({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2">State for Sales Tax</label>
+          <label className="premium-label">State Tax Location</label>
           <select
             value={selectedState}
             onChange={handleStateChange}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+            className="premium-input bg-slate-950/50"
           >
             {Object.keys(STATE_TAX_RATES).map(state => (
               <option key={state} value={state}>{state}</option>
@@ -44,14 +44,14 @@ export function FeesSection({
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Sales Tax Rate</label>
-          <div className="relative">
-            <Percent className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+          <label className="premium-label">Combined Rate</label>
+          <div className="relative group">
+            <Percent className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
             <input
               type="number"
               value={taxRate}
               onChange={(e) => onInputChange('taxRate', parseFloat(e.target.value) || 0)}
-              className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 font-mono"
+              className="premium-input pl-9"
               step="0.001"
               placeholder="0.07"
             />
@@ -61,42 +61,42 @@ export function FeesSection({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-2">Doc Fee</label>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+          <label className="premium-label">Doc Fee</label>
+          <div className="relative group">
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
             <input
               type="number"
               value={docFee === 0 ? '' : docFee}
               onChange={(e) => onInputChange('docFee', parseFloat(e.target.value) || 0)}
-              className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 font-mono"
+              className="premium-input pl-9 text-xs"
               placeholder="200"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Registration Fee</label>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+          <label className="premium-label">Reg Fee</label>
+          <div className="relative group">
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
             <input
               type="number"
               value={registrationFee === 0 ? '' : registrationFee}
               onChange={(e) => onInputChange('registrationFee', parseFloat(e.target.value) || 0)}
-              className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 font-mono"
+              className="premium-input pl-9 text-xs"
               placeholder="150"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Destination Charge</label>
-          <div className="relative">
-            <DollarSign className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+          <label className="premium-label">Destination</label>
+          <div className="relative group">
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
             <input
               type="number"
               value={destinationCharge === 0 ? '' : destinationCharge}
               onChange={(e) => onInputChange('destinationCharge', parseFloat(e.target.value) || 0)}
-              className="w-full pl-10 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 font-mono"
+              className="premium-input pl-9 text-xs"
               placeholder="1200"
             />
           </div>

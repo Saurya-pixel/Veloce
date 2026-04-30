@@ -8,35 +8,36 @@ export function FinancingSection({
   const loanTerms = [24, 36, 48, 60, 72, 84];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <label className="block text-sm font-medium mb-4">
-          APR: <span className="font-mono font-bold text-blue-400">{apr.toFixed(2)}%</span>
-        </label>
+        <div className="flex justify-between items-center mb-2">
+          <label className="premium-label !mb-0">APR</label>
+          <span className="font-mono font-bold text-blue-400 text-sm">{apr.toFixed(2)}%</span>
+        </div>
         <input
           type="range"
-          min="2"
-          max="10"
-          step="0.1"
+          min="0"
+          max="12"
+          step="0.01"
           value={apr}
           onChange={(e) => onInputChange('apr', parseFloat(e.target.value))}
-          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all"
         />
-        <div className="flex justify-between text-xs text-gray-400 mt-1">
-          <span>2%</span>
-          <span>10%</span>
+        <div className="flex justify-between text-[10px] text-slate-500 mt-2 uppercase tracking-tighter font-bold">
+          <span>0%</span>
+          <span>12%</span>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Loan Term (Months)</label>
+        <label className="premium-label">Term Length</label>
         <select
           value={loanTerm}
           onChange={(e) => onInputChange('loanTerm', parseFloat(e.target.value))}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500"
+          className="premium-input bg-slate-950/50"
         >
           {loanTerms.map(term => (
-            <option key={term} value={term}>{term} months ({(term / 12).toFixed(1)} years)</option>
+            <option key={term} value={term}>{term} Months ({term / 12}Y)</option>
           ))}
         </select>
       </div>
