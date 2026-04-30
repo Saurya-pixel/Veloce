@@ -68,7 +68,7 @@ export function HeroSection({ onVehicleChange, selectedMake, selectedModel, sele
           </div>
 
           {/* ─── VEHICLE SELECTOR — front and center ─────────────────────── */}
-          <div className="max-w-2xl mx-auto mb-16 animate-fade-in" style={{ animationDelay: '150ms' }}>
+          <div className="max-w-4xl mx-auto mb-16 animate-fade-in" style={{ animationDelay: '150ms' }}>
             <div className="glass-card p-8 border-blue-500/20 relative overflow-hidden">
               {/* Subtle gradient accent at top */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-500" />

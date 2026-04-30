@@ -23,13 +23,17 @@ function generateSeed(make, model, year) {
 // A Lamborghini Huracan barely loses value, while a Nissan Sentra drops fast.
 
 const EXOTIC_BRANDS = ['ferrari', 'lamborghini', 'mclaren', 'bugatti', 'pagani', 'koenigsegg'];
+const HYPER_EXOTIC_MODELS = [
+  'porsche|911 gt3', 'porsche|911 gt3 rs', 'porsche|911 turbo s', 
+  'mercedes-benz|amg gt black series', 'chevrolet|corvette z06',
+  'ferrari|sf90 stradale', 'ferrari|sf90 spider'
+];
+
 const EXOTIC_MODELS = [
-  'porsche|911 gt3', 'porsche|911 gt3 rs', 'porsche|911 turbo', 'porsche|911 turbo s',
-  'porsche|718 cayman gt4', 'porsche|718 spyder rs',
+  'porsche|911 turbo', 'porsche|718 cayman gt4', 'porsche|718 spyder rs',
   'mercedes-benz|amg gt', 'mercedes-benz|amg gt 63',
   'bmw|m3', 'bmw|m4', 'bmw|m5', 'bmw|m8', 'bmw|xm',
   'audi|r8', 'audi|rs e-tron gt',
-  'chevrolet|corvette z06',
   'dodge|challenger hellcat', 'dodge|durango hellcat',
   'ford|mustang dark horse',
   'cadillac|ct4-v blackwing', 'cadillac|ct5-v blackwing', 'cadillac|celestiq',
@@ -50,7 +54,10 @@ function getVehicleCategory(make, model) {
   const modelLower = model.toLowerCase().trim();
   const key = `${brandLower}|${modelLower}`;
 
-  // Check exotic models first (specific trims that hold extreme value)
+  // Check hyper-exotic models first (extreme appreciation)
+  if (HYPER_EXOTIC_MODELS.some(em => key.startsWith(em) || key === em)) return 'hyper_exotic';
+
+  // Check exotic models next
   if (EXOTIC_BRANDS.includes(brandLower)) return 'exotic';
   if (EXOTIC_MODELS.some(em => key.startsWith(em) || key === em)) return 'exotic';
 
@@ -71,6 +78,23 @@ function getVehicleCategory(make, model) {
 // Based on real-world market data from auction houses and dealer listings.
 
 const DEPRECIATION_CURVES = {
+  // Hyper Exotics: Super high-demand cars that appreciate massively over MSRP.
+  hyper_exotic: {
+    0: 1.45,  // 2026: massive new car premium / markup over MSRP
+    1: 1.35,  // 2025: very high premium
+    2: 1.28,  // 2024: high premium (e.g. 280k for 222k MSRP)
+    3: 1.22,  // 2023:
+    4: 1.18,  // 2022:
+    5: 1.15,  // 2021:
+    6: 1.12,  // 2020:
+    7: 1.10,  // 2019:
+    8: 1.08,  // 2018:
+    9: 1.05,  // 2017:
+    10: 1.05, // 2016:
+    floor: 1.00,
+    annualDecay: 0.00, // They hold above MSRP generally
+  },
+
   // Exotics: Supercars barely depreciate. A 10-year Huracan still fetches 85-95% of MSRP.
   exotic: {
     0: 1.10,  // 2026: new car premium / markup over MSRP
@@ -242,8 +266,9 @@ export function getDepreciationBreakdown(make, model, year) {
     evAdjustmentPct = -8;
   }
 
-  // Clamp: no vehicle should appreciate more than 15% or depreciate below category floor
-  finalMultiplier = Math.min(finalMultiplier, 1.15);
+  // Clamp: allow hyper exotics to appreciate up to 50% over MSRP, others up to 15%
+  const maxMultiplier = (category === 'hyper_exotic') ? 1.50 : 1.15;
+  finalMultiplier = Math.min(finalMultiplier, maxMultiplier);
   finalMultiplier = Math.max(finalMultiplier, curve.floor * 0.9);
 
   return {

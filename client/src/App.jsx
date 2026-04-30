@@ -7,6 +7,7 @@ import { FinancingSection } from './components/FinancingSection';
 import { PriceBreakdown } from './components/PriceBreakdown';
 import { TrendChart } from './components/TrendChart';
 import { HeroSection } from './components/HeroSection';
+import { NewsSidebar } from './components/NewsSidebar';
 
 function App() {
   const [vehicle, setVehicle] = useState({ make: '', model: '', year: '', trim: '' });
@@ -139,13 +140,22 @@ function App() {
 
       {/* ─── Landing State: Hero with embedded vehicle selector ─── */}
       {!hasVehicleSelected && (
-        <HeroSection
-          onVehicleChange={setVehicle}
-          selectedMake={vehicle.make}
-          selectedModel={vehicle.model}
-          selectedYear={vehicle.year}
-          selectedTrim={vehicle.trim}
-        />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-8">
+              <HeroSection
+                onVehicleChange={setVehicle}
+                selectedMake={vehicle.make}
+                selectedModel={vehicle.model}
+                selectedYear={vehicle.year}
+                selectedTrim={vehicle.trim}
+              />
+            </div>
+            <div className="lg:col-span-4 mt-8 lg:mt-0">
+              <NewsSidebar />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ─── Configurator State: Full layout after vehicle is selected ─── */}

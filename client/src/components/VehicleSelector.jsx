@@ -127,7 +127,7 @@ export function VehicleSelector({ onVehicleChange, selectedMake, selectedModel, 
             value={selectedMake}
             onChange={handleMakeChange}
             disabled={loadingMakes}
-            className="premium-input bg-slate-950/50"
+            className="premium-input bg-slate-950/50 text-lg py-4"
           >
             <option value="">Select a make...</option>
             {makes.map(make => (
@@ -142,7 +142,7 @@ export function VehicleSelector({ onVehicleChange, selectedMake, selectedModel, 
             value={selectedModel}
             onChange={handleModelChange}
             disabled={!selectedMake || loadingModels}
-            className="premium-input bg-slate-950/50"
+            className="premium-input bg-slate-950/50 text-lg py-4"
           >
             <option value="">Select a model...</option>
             {models.map(model => (
@@ -159,7 +159,7 @@ export function VehicleSelector({ onVehicleChange, selectedMake, selectedModel, 
             value={selectedYear}
             onChange={handleYearChange}
             disabled={!selectedModel || loadingYears}
-            className="premium-input bg-slate-950/50"
+            className="premium-input bg-slate-950/50 text-lg py-4"
           >
             <option value="">
               {loadingYears ? 'Loading years...' : 'Select a year...'}
@@ -176,7 +176,7 @@ export function VehicleSelector({ onVehicleChange, selectedMake, selectedModel, 
             value={selectedTrim}
             onChange={handleTrimChange}
             disabled={!selectedYear || loadingTrims}
-            className="premium-input bg-slate-950/50 border-blue-500/30"
+            className="premium-input bg-slate-950/50 border-blue-500/30 text-lg py-4"
           >
             <option value="">
               {loadingTrims ? 'Loading trims...' : 'Select a trim...'}
