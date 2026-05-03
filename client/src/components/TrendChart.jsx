@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export function TrendChart({ make, model, year }) {
+export function TrendChart({ make, model, year, trim }) {
   const [trendData, setTrendData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({});
@@ -17,7 +17,11 @@ export function TrendChart({ make, model, year }) {
     const fetchTrends = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/trends/${make}/${model}/${year}`);
+        const url = trim 
+          ? `/api/trends/${make}/${model}/${year}/${encodeURIComponent(trim)}`
+          : `/api/trends/${make}/${model}/${year}`;
+          
+        const res = await fetch(url);
         const data = await res.json();
         setTrendData(data);
 
@@ -47,7 +51,7 @@ export function TrendChart({ make, model, year }) {
     };
 
     fetchTrends();
-  }, [make, model, year]);
+  }, [make, model, year, trim]);
 
   if (!make || !model || !year) {
     return (
@@ -59,8 +63,8 @@ export function TrendChart({ make, model, year }) {
 
   if (loading) {
     return (
-      <div className="p-6 text-center text-slate-500 text-sm">
-        <div className="inline-block w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mr-2" />
+      <div className="p-6 text-center text-zinc-500 text-sm">
+        <div className="inline-block w-5 h-5 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mr-2" />
         Loading market data...
       </div>
     );
@@ -82,7 +86,7 @@ export function TrendChart({ make, model, year }) {
             ) : (
               <TrendingDown className="w-4 h-4 text-red-400" />
             )}
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-zinc-400">
               {isUsed ? `${age}-year depreciated pricing` : 'New vehicle market pricing'} — 
               <span className={stats.trendDirection === 'up' ? 'text-emerald-400' : 'text-red-400'}>
                 {' '}{stats.trendDirection === 'up' ? '↑' : '↓'} {stats.trendPct}% over 12 months
@@ -94,8 +98,8 @@ export function TrendChart({ make, model, year }) {
 
       {/* Chart */}
       <div className="glass-card p-5">
-        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-          <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
+        <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+          <TrendingUp className="w-3.5 h-3.5 text-gold-400" />
           {isUsed ? 'Market Value Over Time' : 'Price & Incentive Trends'}
         </h4>
 
@@ -105,20 +109,20 @@ export function TrendChart({ make, model, year }) {
               <AreaChart data={trendData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                 <defs>
                   <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="incentiveGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#ffffff" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                <XAxis dataKey="month" stroke="#334155" fontSize={10} tickLine={false} axisLine={false} dy={8} />
-                <YAxis stroke="#334155" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
+                <XAxis dataKey="month" stroke="#52525b" fontSize={10} tickLine={false} axisLine={false} dy={8} />
+                <YAxis stroke="#52525b" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    backgroundColor: 'rgba(10, 10, 10, 0.95)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '0.75rem',
                     backdropFilter: 'blur(10px)',
@@ -133,20 +137,20 @@ export function TrendChart({ make, model, year }) {
                 <Area
                   type="monotone"
                   dataKey="avgPrice"
-                  stroke="#3b82f6"
+                  stroke="#D4AF37"
                   strokeWidth={2.5}
                   fill="url(#priceGradient)"
                   dot={false}
-                  activeDot={{ r: 5, fill: '#3b82f6', stroke: '#1e3a5f', strokeWidth: 2 }}
+                  activeDot={{ r: 5, fill: '#D4AF37', stroke: '#000000', strokeWidth: 2 }}
                 />
                 <Area
                   type="monotone"
                   dataKey="incentive"
-                  stroke="#10b981"
+                  stroke="#ffffff"
                   strokeWidth={1.5}
                   fill="url(#incentiveGradient)"
                   dot={false}
-                  activeDot={{ r: 4, fill: '#10b981' }}
+                  activeDot={{ r: 4, fill: '#ffffff' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -158,12 +162,12 @@ export function TrendChart({ make, model, year }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           { label: '12M Low', value: stats.lowPrice, color: 'text-emerald-400' },
-          { label: '12M Avg', value: stats.avgPrice, color: 'text-blue-400' },
+          { label: '12M Avg', value: stats.avgPrice, color: 'text-white' },
           { label: '12M High', value: stats.highPrice, color: 'text-red-400' },
-          { label: 'Avg Incentive', value: stats.avgIncentive, color: 'text-indigo-400' }
+          { label: 'Avg Incentive', value: stats.avgIncentive, color: 'text-gold-400' }
         ].map((stat, i) => (
           <div key={i} className="glass-card p-3">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</p>
+            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{stat.label}</p>
             <p className={`text-base font-mono font-bold mt-1 ${stat.color}`}>
               {formatCurrency(stat.value || 0)}
             </p>

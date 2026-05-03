@@ -4,10 +4,10 @@ const router = express.Router();
 
 // Curated list of popular manufacturers
 const POPULAR_MAKES = [
-  'Acura', 'Audi', 'BMW', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge',
+  'Acura', 'Audi', 'BMW', 'Bugatti', 'Buick', 'Cadillac', 'Chevrolet', 'Chrysler', 'Dodge',
   'Ferrari', 'Ford', 'Genesis', 'GMC', 'Honda', 'Hyundai', 'Infiniti', 'Jeep',
-  'Kia', 'Lamborghini', 'Land Rover', 'Lexus', 'Lincoln', 'Mazda', 'Mercedes-Benz',
-  'Mitsubishi', 'Nissan', 'Porsche', 'Ram', 'Subaru', 'Tesla', 'Toyota',
+  'Kia', 'Koenigsegg', 'Lamborghini', 'Land Rover', 'Lexus', 'Lincoln', 'Mazda', 'McLaren', 
+  'Mercedes-Benz', 'Mitsubishi', 'Nissan', 'Pagani', 'Porsche', 'Ram', 'Subaru', 'Tesla', 'Toyota',
   'Volkswagen', 'Volvo'
 ];
 

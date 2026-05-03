@@ -23,19 +23,21 @@ function getTrims(make, model, year) {
     return [];
   }
 
-  // Apply year-based depreciation to every trim
-  const breakdown = getDepreciationBreakdown(make, model, yearNum);
-  const multiplier = breakdown.finalMultiplier;
+  const depreciatedTrims = availableTrims.map(trim => {
+    // Apply year-based depreciation to every trim, passing the trim name
+    const breakdown = getDepreciationBreakdown(make, model, yearNum, trim.trim);
+    const multiplier = breakdown.finalMultiplier;
 
-  const depreciatedTrims = availableTrims.map(trim => ({
-    trim: trim.trim,
-    originalMsrp: trim.msrp,
-    msrp: Math.round(trim.msrp * multiplier),
-    invoicePrice: Math.round(trim.msrp * multiplier * 0.94),
-    depreciationPct: Math.round((1 - multiplier) * 100),
-    from: trim.from,
-    to: trim.to
-  }));
+    return {
+      trim: trim.trim,
+      originalMsrp: trim.msrp,
+      msrp: Math.round(trim.msrp * multiplier),
+      invoicePrice: Math.round(trim.msrp * multiplier * 0.94),
+      depreciationPct: Math.round((1 - multiplier) * 100),
+      from: trim.from,
+      to: trim.to
+    };
+  });
 
   // Return sorted by depreciated MSRP (base trim first)
   return depreciatedTrims.sort((a, b) => a.msrp - b.msrp);

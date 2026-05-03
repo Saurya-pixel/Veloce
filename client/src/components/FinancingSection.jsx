@@ -12,7 +12,7 @@ export function FinancingSection({
       <div>
         <div className="flex justify-between items-center mb-2">
           <label className="premium-label !mb-0">APR</label>
-          <span className="font-mono font-bold text-blue-400 text-sm">{apr.toFixed(2)}%</span>
+          <span className="font-mono font-bold text-gold-400 text-sm">{apr.toFixed(2)}%</span>
         </div>
         <input
           type="range"
@@ -21,9 +21,9 @@ export function FinancingSection({
           step="0.01"
           value={apr}
           onChange={(e) => onInputChange('apr', parseFloat(e.target.value))}
-          className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all"
+          className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-gold-500 hover:accent-gold-400 transition-all"
         />
-        <div className="flex justify-between text-[10px] text-slate-500 mt-2 uppercase tracking-tighter font-bold">
+        <div className="flex justify-between text-[10px] text-zinc-500 mt-2 uppercase tracking-tighter font-bold">
           <span>0%</span>
           <span>12%</span>
         </div>
@@ -34,7 +34,7 @@ export function FinancingSection({
         <select
           value={loanTerm}
           onChange={(e) => onInputChange('loanTerm', parseFloat(e.target.value))}
-          className="premium-input bg-slate-950/50"
+          className="premium-input bg-black/50"
         >
           {loanTerms.map(term => (
             <option key={term} value={term}>{term} Months ({term / 12}Y)</option>

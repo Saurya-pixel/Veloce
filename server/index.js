@@ -6,6 +6,7 @@ import pricingRoute from './routes/pricing.js';
 import trendsRoute from './routes/trends.js';
 import yearsRoute from './routes/years.js';
 import trimsRoute from './routes/trims.js';
+import newsRoute from './routes/news.js';
 
 const app = express();
 const PORT = 3001;
@@ -19,6 +20,7 @@ app.use('/api', yearsRoute);
 app.use('/api', pricingRoute);
 app.use('/api', trendsRoute);
 app.use('/api', trimsRoute);
+app.use('/api', newsRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

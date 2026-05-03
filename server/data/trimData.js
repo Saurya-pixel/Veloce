@@ -437,6 +437,19 @@ const ALL_TRIM_DATA = {
     { trim: "Base", msrp: 335000, from: 2017, to: 2024 },
     { trim: "Competizione", msrp: 478000, from: 2021, to: 2024 },
   ],
+  "ferrari|laferrari": [
+    { trim: "Coupe", msrp: 1416362, from: 2013, to: 2016 },
+    { trim: "Aperta", msrp: 2200000, from: 2016, to: 2018 },
+  ],
+  "ferrari|enzo": [
+    { trim: "Base", msrp: 659330, from: 2002, to: 2004 },
+  ],
+  "ferrari|f50": [
+    { trim: "Base", msrp: 475000, from: 1995, to: 1997 },
+  ],
+  "ferrari|f40": [
+    { trim: "Base", msrp: 400000, from: 1987, to: 1992 },
+  ],
 
   // ─── FORD ──────────────────────────────────────────────────────────────────
   "ford|mustang": [
@@ -1138,6 +1151,13 @@ const ALL_TRIM_DATA = {
     { trim: "RWD", msrp: 105000, from: 2021, to: 2026 },
     { trim: "Sport Turismo", msrp: 130000, from: 2022, to: 2026 },
   ],
+  "porsche|918 spyder": [
+    { trim: "Base", msrp: 845000, from: 2013, to: 2015 },
+    { trim: "Weissach Package", msrp: 929000, from: 2013, to: 2015 },
+  ],
+  "porsche|carrera gt": [
+    { trim: "Base", msrp: 448000, from: 2004, to: 2006 },
+  ],
 
   // ─── RAM ───────────────────────────────────────────────────────────────────
   "ram|1500": [
@@ -1393,6 +1413,57 @@ const ALL_TRIM_DATA = {
     { trim: "Plus", msrp: 88000, from: 2024, to: 2026 },
     { trim: "Ultra", msrp: 102000, from: 2024, to: 2026 },
   ],
+  // ─── BUGATTI ───────────────────────────────────────────────────────────────
+  "bugatti|chiron": [
+    { trim: "Base", msrp: 2998000, from: 2016, to: 2022 },
+    { trim: "Pur Sport", msrp: 3600000, from: 2020, to: 2022 },
+    { trim: "Super Sport 300+", msrp: 3900000, from: 2021, to: 2022 },
+  ],
+  "bugatti|veyron": [
+    { trim: "Base", msrp: 1700000, from: 2005, to: 2011 },
+    { trim: "Grand Sport Vitesse", msrp: 2250000, from: 2012, to: 2015 },
+  ],
+  // ─── MCLAREN ───────────────────────────────────────────────────────────────
+  "mclaren|p1": [
+    { trim: "Base", msrp: 1150000, from: 2013, to: 2015 },
+    { trim: "GTR", msrp: 3100000, from: 2015, to: 2016 },
+  ],
+  "mclaren|f1": [
+    { trim: "Base", msrp: 815000, from: 1992, to: 1998 },
+    { trim: "LM", msrp: 1250000, from: 1995, to: 1996 },
+  ],
+  "mclaren|senna": [
+    { trim: "Base", msrp: 958966, from: 2018, to: 2019 },
+    { trim: "GTR", msrp: 1650000, from: 2019, to: 2020 },
+  ],
+  "mclaren|720s": [
+    { trim: "Base", msrp: 284745, from: 2017, to: 2023 },
+    { trim: "Spider", msrp: 315000, from: 2019, to: 2023 },
+  ],
+  "mclaren|750s": [
+    { trim: "Base", msrp: 324000, from: 2023, to: 2026 },
+  ],
+  // ─── KOENIGSEGG ────────────────────────────────────────────────────────────
+  "koenigsegg|jesko": [
+    { trim: "Base", msrp: 3000000, from: 2021, to: 2026 },
+    { trim: "Absolut", msrp: 3400000, from: 2021, to: 2026 },
+  ],
+  "koenigsegg|agera": [
+    { trim: "R", msrp: 1600000, from: 2011, to: 2014 },
+    { trim: "RS", msrp: 2500000, from: 2015, to: 2018 },
+  ],
+  // ─── PAGANI ───────────────────────────────────────────────────────────────
+  "pagani|huayra": [
+    { trim: "Base", msrp: 1314000, from: 2012, to: 2018 },
+    { trim: "BC", msrp: 2550000, from: 2016, to: 2019 },
+    { trim: "Roadster", msrp: 2600000, from: 2017, to: 2019 },
+  ],
+  "pagani|zonda": [
+    { trim: "C12", msrp: 325000, from: 1999, to: 2002 },
+    { trim: "S 7.3", msrp: 500000, from: 2002, to: 2005 },
+    { trim: "F", msrp: 741000, from: 2005, to: 2011 },
+    { trim: "Cinque", msrp: 1900000, from: 2009, to: 2010 },
+  ],
 };
 
 // Verification check
@@ -1419,7 +1490,13 @@ const REQUIRED_KEYS = [
   "dodge|charger","dodge|challenger","dodge|durango","dodge|hornet",
   "ferrari|roma","ferrari|sf90 stradale","ferrari|f8 tributo",
   "ferrari|296 gtb","ferrari|purosangue","ferrari|portofino m",
-  "ferrari|812 superfast","ford|mustang","ford|f-150",
+  "ferrari|812 superfast","ferrari|laferrari","ferrari|enzo",
+  "ferrari|f50","ferrari|f40",
+  "bugatti|chiron","bugatti|veyron",
+  "mclaren|p1","mclaren|f1","mclaren|senna","mclaren|720s","mclaren|750s",
+  "koenigsegg|jesko","koenigsegg|agera",
+  "pagani|huayra","pagani|zonda",
+  "ford|mustang","ford|f-150",
   "ford|explorer","ford|escape","ford|edge","ford|expedition",
   "ford|bronco","ford|bronco sport","ford|maverick",
   "ford|mustang mach-e","ford|f-150 lightning","genesis|g70",
@@ -1460,6 +1537,7 @@ const REQUIRED_KEYS = [
   "porsche|911","porsche|718 cayman","porsche|718 boxster",
   "porsche|cayenne","porsche|macan","porsche|panamera",
   "porsche|taycan","porsche|taycan cross turismo",
+  "porsche|918 spyder","porsche|carrera gt",
   "ram|1500","ram|2500","ram|3500","subaru|outback",
   "subaru|forester","subaru|crosstrek","subaru|wrx","subaru|brz",
   "subaru|solterra","subaru|ascent","tesla|model s",

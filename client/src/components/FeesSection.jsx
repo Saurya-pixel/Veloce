@@ -35,7 +35,7 @@ export function FeesSection({
           <select
             value={selectedState}
             onChange={handleStateChange}
-            className="premium-input bg-slate-950/50"
+            className="premium-input bg-black/50"
           >
             {Object.keys(STATE_TAX_RATES).map(state => (
               <option key={state} value={state}>{state}</option>
@@ -46,7 +46,7 @@ export function FeesSection({
         <div>
           <label className="premium-label">Combined Rate</label>
           <div className="relative group">
-            <Percent className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <Percent className="absolute left-3 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-gold-500 transition-colors" />
             <input
               type="number"
               value={taxRate}
@@ -63,7 +63,7 @@ export function FeesSection({
         <div>
           <label className="premium-label">Doc Fee</label>
           <div className="relative group">
-            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-gold-500 transition-colors" />
             <input
               type="number"
               value={docFee === 0 ? '' : docFee}
@@ -77,7 +77,7 @@ export function FeesSection({
         <div>
           <label className="premium-label">Reg Fee</label>
           <div className="relative group">
-            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-gold-500 transition-colors" />
             <input
               type="number"
               value={registrationFee === 0 ? '' : registrationFee}
@@ -91,7 +91,7 @@ export function FeesSection({
         <div>
           <label className="premium-label">Destination</label>
           <div className="relative group">
-            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-gold-500 transition-colors" />
             <input
               type="number"
               value={destinationCharge === 0 ? '' : destinationCharge}

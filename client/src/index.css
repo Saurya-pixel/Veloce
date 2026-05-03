@@ -4,18 +4,18 @@
 
 @layer base {
   :root {
-    --brand-primary: #3b82f6;
-    --brand-secondary: #6366f1;
-    --brand-accent: #10b981;
-    --bg-main: #020617;
-    --bg-card: #0f172a;
-    --glass-bg: rgba(15, 23, 42, 0.7);
+    --brand-primary: #D4AF37;
+    --brand-secondary: #AA8529;
+    --brand-accent: #ffffff;
+    --bg-main: #000000;
+    --bg-card: #111111;
+    --glass-bg: rgba(20, 20, 20, 0.7);
     --glass-border: rgba(255, 255, 255, 0.1);
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 font-sans selection:bg-blue-500/30;
-    background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 100%);
+    @apply bg-black text-white font-sans selection:bg-gold-500/30;
+    background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 100%);
     background-attachment: fixed;
   }
 
@@ -26,23 +26,23 @@
 
 @layer components {
   .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
   }
 
   .premium-input {
-    @apply w-full px-4 py-3 bg-slate-950/50 border border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50 transition-all font-mono text-sm;
+    @apply w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500/40 focus:border-gold-500/50 transition-all font-mono text-sm;
   }
 
   .premium-label {
-    @apply block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 ml-1;
+    @apply block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 ml-1;
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-900/20 active:scale-95 transition-all;
+    @apply px-6 py-3 bg-gold-500 hover:bg-gold-400 text-black font-bold rounded-xl shadow-lg shadow-gold-900/20 active:scale-95 transition-all;
   }
 
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-300 to-gold-500;
   }
 }
 
@@ -52,11 +52,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-950;
+  @apply bg-black;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-800 rounded-full hover:bg-slate-700 transition-colors;
+  @apply bg-zinc-800 rounded-full hover:bg-zinc-700 transition-colors;
 }
 
 /* Animations */

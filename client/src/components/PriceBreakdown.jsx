@@ -74,14 +74,14 @@ export function PriceBreakdown({
     <div className="space-y-6 animate-fade-in">
       {/* Price Breakdown Card */}
       <div className="glass-card overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 p-6 border-b border-white/5">
+        <div className="bg-gradient-to-r from-gold-600/10 to-zinc-600/10 p-6 border-b border-white/5">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold flex items-center gap-2">
-              <span className="w-2 h-6 bg-blue-500 rounded-full"></span>
+              <span className="w-2 h-6 bg-gold-500 rounded-full"></span>
               Out-the-Door Summary
             </h3>
             {isUsedCar && (
-              <span className="px-3 py-1 bg-amber-500/20 border border-amber-500/30 rounded-full text-[10px] font-bold text-amber-300 uppercase tracking-widest">
+              <span className="px-3 py-1 bg-gold-500/20 border border-gold-500/30 rounded-full text-[10px] font-bold text-gold-300 uppercase tracking-widest">
                 {vehicleYear} • Used
               </span>
             )}
@@ -177,10 +177,10 @@ export function PriceBreakdown({
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Monthly Estimate</p>
-                <p className="text-3xl font-black text-blue-500 tracking-tighter mt-1">
+                <p className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Monthly Estimate</p>
+                <p className="text-3xl font-black text-gold-500 tracking-tighter mt-1">
                   {formatCurrency(monthlyPayment)}
-                  <span className="text-sm font-normal text-slate-500">/mo</span>
+                  <span className="text-sm font-normal text-zinc-500">/mo</span>
                 </p>
               </div>
             </div>
@@ -199,13 +199,13 @@ export function PriceBreakdown({
               <span>Down Payment ({downPct}%)</span>
               <span>Financed ({financedPct}%)</span>
             </div>
-            <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
+            <div className="w-full h-3 bg-zinc-800 rounded-full overflow-hidden flex">
               <div 
                 className="h-full bg-emerald-500 rounded-l-full transition-all duration-500"
                 style={{ width: `${Math.max(downPct, 2)}%` }}
               />
               <div 
-                className="h-full bg-blue-500 rounded-r-full transition-all duration-500"
+                className="h-full bg-gold-500 rounded-r-full transition-all duration-500"
                 style={{ width: `${financedPct}%` }}
               />
             </div>
@@ -224,11 +224,11 @@ export function PriceBreakdown({
               <span className="font-mono text-emerald-400 font-bold">-{formatCurrency(downPayment)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-blue-400 flex items-center gap-1">
-                <span className="w-2 h-2 bg-blue-500 rounded-full inline-block"></span>
+              <span className="text-gold-400 flex items-center gap-1">
+                <span className="w-2 h-2 bg-gold-500 rounded-full inline-block"></span>
                 Loan Amount
               </span>
-              <span className="font-mono text-blue-400 font-bold">{formatCurrency(loanAmount)}</span>
+              <span className="font-mono text-gold-400 font-bold">{formatCurrency(loanAmount)}</span>
             </div>
             <div className="pt-3 border-t border-white/5 space-y-2">
               <div className="flex justify-between text-xs">
@@ -261,7 +261,7 @@ export function PriceBreakdown({
               <span className="text-slate-400">Spread</span>
               <span className="font-mono text-emerald-400">{formatCurrency(msrp - invoicePrice)}</span>
             </div>
-            <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg text-[11px] leading-relaxed text-blue-200">
+            <div className="p-3 bg-gold-500/10 border border-gold-500/20 rounded-lg text-[11px] leading-relaxed text-zinc-300">
               {isUsedCar
                 ? `This ${vehicleYear} model has depreciated ~${depreciationPct}% from its original MSRP. The dealer invoice estimate suggests up to ${formatCurrency(msrp - invoicePrice)} in negotiation room.`
                 : `Dealer profit is approximately ${(((msrp - invoicePrice) / msrp) * 100).toFixed(1)}% of MSRP. Target a discount within this range for a fair deal.`

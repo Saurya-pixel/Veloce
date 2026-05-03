@@ -77,6 +77,8 @@ export const MODEL_START_YEARS = {
   "porsche|panamera": 2010,
   "porsche|taycan": 2020,
   "porsche|taycan cross turismo": 2022,
+  "porsche|918 spyder": 2013,
+  "porsche|carrera gt": 2004,
 
   // TESLA
   "tesla|model s": 2013,
@@ -196,6 +198,12 @@ export const MODEL_START_YEARS = {
   "ferrari|296 gtb": 2023,
   "ferrari|purosangue": 2024,
   "ferrari|portofino": 2018,
+  "ferrari|laferrari": 2013,
+  "ferrari|enzo": 2002,
+  "ferrari|f50": 1995,
+  "ferrari|f40": 1987,
+  "ferrari|testarossa": 1984,
+  "ferrari|250 gto": 1962,
 
   // LAMBORGHINI
   "lamborghini|huracan": 2015,
@@ -335,6 +343,25 @@ export const MODEL_START_YEARS = {
   "mitsubishi|eclipse cross": 2018,
   "mitsubishi|outlander sport": 2011,
   "mitsubishi|mirage": 2014,
+
+  // BUGATTI
+  "bugatti|chiron": 2016,
+  "bugatti|veyron": 2005,
+
+  // MCLAREN
+  "mclaren|p1": 2013,
+  "mclaren|f1": 1992,
+  "mclaren|senna": 2018,
+  "mclaren|720s": 2017,
+  "mclaren|750s": 2023,
+
+  // KOENIGSEGG
+  "koenigsegg|jesko": 2021,
+  "koenigsegg|agera": 2010,
+
+  // PAGANI
+  "pagani|huayra": 2012,
+  "pagani|zonda": 1999,
 };
 
 // Normalize model name for lookup

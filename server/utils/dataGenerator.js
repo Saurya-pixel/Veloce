@@ -24,9 +24,20 @@ function generateSeed(make, model, year) {
 
 const EXOTIC_BRANDS = ['ferrari', 'lamborghini', 'mclaren', 'bugatti', 'pagani', 'koenigsegg'];
 const HYPER_EXOTIC_MODELS = [
-  'porsche|911 gt3', 'porsche|911 gt3 rs', 'porsche|911 turbo s', 
+  'porsche|911 gt3', 'porsche|911 gt3 rs', 'porsche|911 turbo s', 'porsche|911 s/t',
+  'porsche|718 cayman gt4', 'porsche|718 boxster spyder',
   'mercedes-benz|amg gt black series', 'chevrolet|corvette z06',
-  'ferrari|sf90 stradale', 'ferrari|sf90 spider'
+  'ferrari|sf90 stradale assetto fiorano', 'ferrari|f8 tributo pista', 
+  'ferrari|296 gtb assetto fiorano', 'ferrari|812 superfast competizione',
+  'ferrari|laferrari', 'ferrari|enzo', 'ferrari|f50', 'ferrari|f40',
+  'lamborghini|huracan sto', 'lamborghini|huracan performante', 'lamborghini|revuelto opera unica',
+  'bugatti|chiron', 'bugatti|veyron',
+  'mclaren|p1', 'mclaren|f1', 'mclaren|senna',
+  'porsche|918 spyder', 'porsche|carrera gt',
+  'koenigsegg|jesko', 'koenigsegg|agera',
+  'pagani|huayra', 'pagani|zonda',
+  'ferrari|testarossa', 'ferrari|250 gto',
+  'ford|f-150 raptor r', 'mercedes-benz|g-class amg g 63 grand', 'bmw|m3 cs', 'audi|r8 v10 gt'
 ];
 
 const EXOTIC_MODELS = [
@@ -38,6 +49,7 @@ const EXOTIC_MODELS = [
   'ford|mustang dark horse',
   'cadillac|ct4-v blackwing', 'cadillac|ct5-v blackwing', 'cadillac|celestiq',
   'acura|nsx',
+  'mclaren|720s', 'mclaren|750s',
 ];
 
 const LUXURY_BRANDS = ['porsche', 'genesis', 'lexus', 'lincoln', 'cadillac', 'land rover'];
@@ -49,17 +61,19 @@ const TRUCK_MODELS = [
   'wrangler', 'bronco', '4runner', 'defender',
 ];
 
-function getVehicleCategory(make, model) {
+function getVehicleCategory(make, model, trim = '') {
   const brandLower = make.toLowerCase().trim();
   const modelLower = model.toLowerCase().trim();
-  const key = `${brandLower}|${modelLower}`;
+  const trimLower = trim.toLowerCase().trim();
+  const keyBase = `${brandLower}|${modelLower}`;
+  const keyWithTrim = trimLower ? `${keyBase} ${trimLower}` : keyBase;
 
   // Check hyper-exotic models first (extreme appreciation)
-  if (HYPER_EXOTIC_MODELS.some(em => key.startsWith(em) || key === em)) return 'hyper_exotic';
+  if (HYPER_EXOTIC_MODELS.some(em => keyWithTrim.startsWith(em) || keyWithTrim === em || keyBase === em)) return 'hyper_exotic';
 
   // Check exotic models next
   if (EXOTIC_BRANDS.includes(brandLower)) return 'exotic';
-  if (EXOTIC_MODELS.some(em => key.startsWith(em) || key === em)) return 'exotic';
+  if (EXOTIC_MODELS.some(em => keyWithTrim.startsWith(em) || keyWithTrim === em || keyBase === em)) return 'exotic';
 
   // Check if it's a truck/off-road (these hold value very well)
   if (TRUCK_MODELS.some(t => modelLower.includes(t))) return 'truck';
@@ -80,19 +94,19 @@ function getVehicleCategory(make, model) {
 const DEPRECIATION_CURVES = {
   // Hyper Exotics: Super high-demand cars that appreciate massively over MSRP.
   hyper_exotic: {
-    0: 1.45,  // 2026: massive new car premium / markup over MSRP
-    1: 1.35,  // 2025: very high premium
-    2: 1.28,  // 2024: high premium (e.g. 280k for 222k MSRP)
-    3: 1.22,  // 2023:
-    4: 1.18,  // 2022:
-    5: 1.15,  // 2021:
-    6: 1.12,  // 2020:
-    7: 1.10,  // 2019:
-    8: 1.08,  // 2018:
-    9: 1.05,  // 2017:
-    10: 1.05, // 2016:
-    floor: 1.00,
-    annualDecay: 0.00, // They hold above MSRP generally
+    0: 1.45,  // Brand new premium
+    1: 1.30,
+    2: 1.25,
+    3: 1.22,
+    4: 1.20,
+    5: 1.25,  // Value starts climbing after production ends
+    6: 1.35,
+    7: 1.50,
+    8: 1.70,
+    9: 2.00,
+    10: 2.50, // 10 years old: 2.5x MSRP (e.g. LaFerrari, P1)
+    floor: 1.20,
+    annualDecay: -0.15, // Negative decay = appreciation! 15% per year after 10 years
   },
 
   // Exotics: Supercars barely depreciate. A 10-year Huracan still fetches 85-95% of MSRP.
@@ -231,14 +245,14 @@ const EV_MODELS = [
 
 // ─── Core Depreciation Calculator ────────────────────────────────────────────
 
-export function getDepreciationBreakdown(make, model, year) {
+export function getDepreciationBreakdown(make, model, year, trim = '') {
   const currentYear = 2026;
   const age = currentYear - year;
   const brandLower = make.toLowerCase().trim();
   const modelLower = model.toLowerCase().trim();
 
   // Determine vehicle category
-  const category = getVehicleCategory(make, model);
+  const category = getVehicleCategory(make, model, trim);
   const curve = DEPRECIATION_CURVES[category];
 
   // Get base multiplier from category-specific curve
@@ -246,8 +260,14 @@ export function getDepreciationBreakdown(make, model, year) {
   if (age <= 10) {
     baseMultiplier = curve[age] !== undefined ? curve[age] : curve[10];
   } else {
-    // Beyond 10 years: decay slowly from the 10-year value
-    baseMultiplier = Math.max(curve.floor, curve[10] - (age - 10) * curve.annualDecay);
+    // Beyond 10 years:
+    if (category === 'hyper_exotic') {
+      // For hyper exotics, age > 10 means more appreciation
+      baseMultiplier = curve[10] + (age - 10) * Math.abs(curve.annualDecay);
+    } else {
+      // Standard decay
+      baseMultiplier = Math.max(curve.floor, curve[10] - (age - 10) * curve.annualDecay);
+    }
   }
 
   // Year depreciation percentage
@@ -266,8 +286,8 @@ export function getDepreciationBreakdown(make, model, year) {
     evAdjustmentPct = -8;
   }
 
-  // Clamp: allow hyper exotics to appreciate up to 50% over MSRP, others up to 15%
-  const maxMultiplier = (category === 'hyper_exotic') ? 1.50 : 1.15;
+  // Clamp: allow hyper exotics to appreciate massively, others up to 15%
+  const maxMultiplier = (category === 'hyper_exotic') ? 40.0 : 1.15;
   finalMultiplier = Math.min(finalMultiplier, maxMultiplier);
   finalMultiplier = Math.max(finalMultiplier, curve.floor * 0.9);
 
@@ -285,8 +305,8 @@ export function getDepreciationBreakdown(make, model, year) {
 }
 
 // Get depreciation multiplier for year
-export function getYearMultiplier(year, make = '', model = '') {
-  const breakdown = getDepreciationBreakdown(make, model, year);
+export function getYearMultiplier(year, make = '', model = '', trim = '') {
+  const breakdown = getDepreciationBreakdown(make, model, year, trim);
   return breakdown.finalMultiplier;
 }
 
@@ -340,15 +360,22 @@ export function generatePricingData(make, model, year, basePrice, confidence) {
 
 // ─── Trend Data Generator (Now uses depreciated prices) ──────────────────────
 
-export function generateTrendData(make, model, year) {
+export function generateTrendData(make, model, year, trim = '') {
   const seed = generateSeed(make, model, year);
   const currentYear = 2026;
   const age = currentYear - year;
 
   // Get the DEPRECIATED base price for this vehicle, not the original MSRP
   const { msrp: originalMsrp } = getBasePrice(make, model);
-  const yearMultiplier = getYearMultiplier(year, make, model);
-  const depreciatedPrice = Math.round(originalMsrp * yearMultiplier);
+  const yearMultiplier = getYearMultiplier(year, make, model, trim);
+  
+  // Try to use a more accurate base if it's a hyper exotic
+  let basePriceToUse = originalMsrp;
+  if (yearMultiplier > 1.0 && originalMsrp < 150000) {
+     basePriceToUse = 230000; // rough approximation for hyper exotic trims that are missing base MSRP
+  }
+
+  const depreciatedPrice = Math.round(basePriceToUse * yearMultiplier);
 
   const trends = [];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -363,20 +390,28 @@ export function generateTrendData(make, model, year) {
       seasonalFactor = 1 + Math.sin(((i + 3) / 12) * Math.PI * 2) * 0.015;
     }
 
-    // Gradual depreciation over the 13-month window for used cars
-    const monthlyDepreciation = age > 0 ? 1 - (i * 0.002) : 1.0; // ~0.2% per month
+    // Appreciating cars (multiplier > 1.0) should have an upward trend month over month
+    let monthlyTrend = 1.0;
+    if (yearMultiplier > 1.0) {
+      monthlyTrend = 1 - ((12 - i) * 0.005); // Upward slope
+    } else if (age > 0) {
+      monthlyTrend = 1 + ((12 - i) * 0.002); // Downward slope
+    }
 
-    const avgPrice = Math.round(depreciatedPrice * randomWalk * seasonalFactor * monthlyDepreciation);
+    const avgPrice = Math.round(depreciatedPrice * randomWalk * seasonalFactor * monthlyTrend);
 
     // Incentives scale with age
     const baseIncentive = Math.max(500, 1500 + age * 400);
     const incentive = Math.round(baseIncentive + seededRandom(seed + i * 100 + 50) * 2000);
+    
+    // Hyper exotics have 0 incentives
+    const finalIncentive = yearMultiplier > 1.0 ? 0 : incentive;
 
     const monthIndex = i % 12;
     trends.push({
       month: months[monthIndex],
       avgPrice,
-      incentive
+      incentive: finalIncentive
     });
   }
 

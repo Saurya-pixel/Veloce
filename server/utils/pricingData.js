@@ -22,6 +22,12 @@ export const MODEL_BASE_MSRP = {
   "ferrari|purosangue": 398000,
   "ferrari|812 superfast": 335000,
   "ferrari|812 gts": 360000,
+  "ferrari|laferrari": 1416362,
+  "ferrari|enzo": 659330,
+  "ferrari|f50": 475000,
+  "ferrari|f40": 400000,
+  "ferrari|250 gto": 18000, // Original price was low, appreciation will fix it
+  "ferrari|testarossa": 181000,
 
   // PORSCHE
   "porsche|911": 115000,
@@ -50,6 +56,8 @@ export const MODEL_BASE_MSRP = {
   "porsche|taycan turbo": 163000,
   "porsche|taycan turbo s": 196000,
   "porsche|taycan cross turismo": 105000,
+  "porsche|918 spyder": 845000,
+  "porsche|carrera gt": 448000,
 
   // MERCEDES-BENZ
   "mercedes-benz|a-class": 34000,
@@ -389,6 +397,25 @@ export const MODEL_BASE_MSRP = {
   "mitsubishi|outlander sport": 24000,
   "mitsubishi|eclipse cross": 26000,
   "mitsubishi|outlander": 28000,
+
+  // BUGATTI
+  "bugatti|chiron": 2998000,
+  "bugatti|veyron": 1700000,
+
+  // MCLAREN
+  "mclaren|p1": 1150000,
+  "mclaren|f1": 815000,
+  "mclaren|senna": 958966,
+  "mclaren|720s": 284745,
+  "mclaren|750s": 324000,
+
+  // KOENIGSEGG
+  "koenigsegg|jesko": 3000000,
+  "koenigsegg|agera": 2100000,
+
+  // PAGANI
+  "pagani|huayra": 1314000,
+  "pagani|zonda": 500000,
 };
 
 // Brand-level MSRP floors for fallback
@@ -425,6 +452,10 @@ const BRAND_FLOOR_MSRP = {
   'dodge': 30000,
   'chrysler': 32000,
   'mitsubishi': 16000,
+  'bugatti': 1500000,
+  'mclaren': 250000,
+  'koenigsegg': 2000000,
+  'pagani': 1000000,
 };
 
 // Normalize input for lookup

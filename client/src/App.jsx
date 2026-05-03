@@ -125,11 +125,11 @@ function App() {
       <div className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center animate-fade-in">
           <div className="flex items-center justify-center gap-4 mb-3">
-            <div className="p-3 bg-blue-600/20 rounded-2xl border border-blue-500/30">
-              <Car className="w-10 h-10 text-blue-500" />
+            <div className="p-3 bg-gold-500/10 rounded-2xl border border-gold-500/30">
+              <Car className="w-10 h-10 text-gold-500" />
             </div>
-            <h1 className="text-5xl font-black tracking-tighter italic uppercase">
-              Vel<span className="text-blue-500">oce</span>
+            <h1 className="text-5xl font-black tracking-tighter italic uppercase text-white">
+              Vel<span className="text-gold-500">oce</span>
             </h1>
           </div>
           <p className="text-slate-400 max-w-lg mx-auto text-sm">
@@ -186,6 +186,7 @@ function App() {
                   )}
                   <PriceInputs
                     msrp={msrp}
+                    isUsedCar={isUsedCar}
                     dealerDiscount={dealerDiscount}
                     tradeInValue={tradeInValue}
                     remainingLoan={remainingLoan}
@@ -207,21 +208,21 @@ function App() {
                   />
                   <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs text-slate-400 uppercase tracking-widest font-bold">Tax after trade-in</label>
+                      <label className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Tax after trade-in</label>
                       <button
                         onClick={() => setIsTaxAfterTradeIn(!isTaxAfterTradeIn)}
-                        className={`w-10 h-5 rounded-full transition-colors relative ${isTaxAfterTradeIn ? 'bg-blue-600' : 'bg-slate-700'}`}
+                        className={`w-10 h-5 rounded-full transition-colors relative ${isTaxAfterTradeIn ? 'bg-gold-500' : 'bg-zinc-800'}`}
                       >
-                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${isTaxAfterTradeIn ? 'left-6' : 'left-1'}`} />
+                        <div className={`absolute top-1 w-3 h-3 bg-black rounded-full transition-transform ${isTaxAfterTradeIn ? 'left-6' : 'left-1'}`} />
                       </button>
                     </div>
                     <div className="flex items-center justify-between">
-                      <label className="text-xs text-slate-400 uppercase tracking-widest font-bold">Taxable Rebates</label>
+                      <label className="text-xs text-zinc-400 uppercase tracking-widest font-bold">Taxable Rebates</label>
                       <button
                         onClick={() => setIsRebateTaxable(!isRebateTaxable)}
-                        className={`w-10 h-5 rounded-full transition-colors relative ${isRebateTaxable ? 'bg-blue-600' : 'bg-slate-700'}`}
+                        className={`w-10 h-5 rounded-full transition-colors relative ${isRebateTaxable ? 'bg-gold-500' : 'bg-zinc-800'}`}
                       >
-                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${isRebateTaxable ? 'left-6' : 'left-1'}`} />
+                        <div className={`absolute top-1 w-3 h-3 bg-black rounded-full transition-transform ${isRebateTaxable ? 'left-6' : 'left-1'}`} />
                       </button>
                     </div>
                   </div>
@@ -268,6 +269,7 @@ function App() {
                       make={vehicle.make}
                       model={vehicle.model}
                       year={vehicle.year}
+                      trim={vehicle.trim}
                     />
                   </div>
                 </div>
